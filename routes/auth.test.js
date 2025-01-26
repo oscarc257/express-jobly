@@ -19,6 +19,7 @@ afterAll(commonAfterAll);
 /************************************** POST /auth/token */
 
 describe("POST /auth/token", function () {
+  // test for successful token generation
   test("works", async function () {
     const resp = await request(app)
         .post("/auth/token")
@@ -31,6 +32,7 @@ describe("POST /auth/token", function () {
     });
   });
 
+  // Test for unauthorized access with non-existent user
   test("unauth with non-existent user", async function () {
     const resp = await request(app)
         .post("/auth/token")
@@ -41,6 +43,7 @@ describe("POST /auth/token", function () {
     expect(resp.statusCode).toEqual(401);
   });
 
+  // Test for unauthorized access with wrong password
   test("unauth with wrong password", async function () {
     const resp = await request(app)
         .post("/auth/token")
@@ -51,6 +54,7 @@ describe("POST /auth/token", function () {
     expect(resp.statusCode).toEqual(401);
   });
 
+  // Test for bad request with missing data
   test("bad request with missing data", async function () {
     const resp = await request(app)
         .post("/auth/token")
@@ -60,6 +64,7 @@ describe("POST /auth/token", function () {
     expect(resp.statusCode).toEqual(400);
   });
 
+  // Test for bad request with invalid data
   test("bad request with invalid data", async function () {
     const resp = await request(app)
         .post("/auth/token")
@@ -74,6 +79,7 @@ describe("POST /auth/token", function () {
 /************************************** POST /auth/register */
 
 describe("POST /auth/register", function () {
+  // Test for successful registration
   test("works for anon", async function () {
     const resp = await request(app)
         .post("/auth/register")
@@ -90,6 +96,7 @@ describe("POST /auth/register", function () {
     });
   });
 
+  // Test for bad request with missing fields
   test("bad request with missing fields", async function () {
     const resp = await request(app)
         .post("/auth/register")
@@ -99,6 +106,7 @@ describe("POST /auth/register", function () {
     expect(resp.statusCode).toEqual(400);
   });
 
+  // Test for bad request with invalid data
   test("bad request with invalid data", async function () {
     const resp = await request(app)
         .post("/auth/register")

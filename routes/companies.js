@@ -1,4 +1,7 @@
 "use strict";
+//validate the query parameters and call the updated model method.
+// The provided companies.js file defines the routes for handling company-related operations, including creating, retrieving, updating, and deleting companies.
+//  It also includes filtering functionality for the GET /companies route.
 
 /** Routes for companies. */
 
@@ -62,6 +65,10 @@ router.get("/", async function (req, res, next) {
     if (!validator.valid) {
       const errs = validator.errors.map(e => e.stack);
       throw new BadRequestError(errs);
+    }
+    // if minEmployees > maxEmployees, throw error
+    if (q.minEmployees !== undefined && q.maxEmployees !== undefined && q.minEmployees > q.maxEmployees) {
+      throw new BadRequestError("minEmployees cannot be greater than maxEmployees");
     }
 
     const companies = await Company.findAll(q);

@@ -30,6 +30,7 @@ describe("POST /companies", function () {
     numEmployees: 10,
   };
 
+  // Test for successful company creation by admin
   test("ok for admin", async function () {
     const resp = await request(app)
         .post("/companies")
@@ -41,6 +42,7 @@ describe("POST /companies", function () {
     });
   });
 
+  // Test for unauthorized access by non-admin
   test("unauth for non-admin", async function () {
     const resp = await request(app)
         .post("/companies")
@@ -49,6 +51,7 @@ describe("POST /companies", function () {
     expect(resp.statusCode).toEqual(401);
   });
 
+  // Test for bad request with missing data
   test("bad request with missing data", async function () {
     const resp = await request(app)
         .post("/companies")
@@ -60,6 +63,7 @@ describe("POST /companies", function () {
     expect(resp.statusCode).toEqual(400);
   });
 
+  // Test for bad request with invalid data
   test("bad request with invalid data", async function () {
     const resp = await request(app)
         .post("/companies")
@@ -75,6 +79,7 @@ describe("POST /companies", function () {
 /************************************** GET /companies */
 
 describe("GET /companies", function () {
+  // Test for successful retrieval of companies for anonymous user
   test("ok for anon", async function () {
     const resp = await request(app).get("/companies");
     expect(resp.body).toEqual({
@@ -105,6 +110,7 @@ describe("GET /companies", function () {
     });
   });
 
+  // Test for successful filtering of companies
   test("works: filtering", async function () {
     const resp = await request(app)
         .get("/companies")
@@ -122,6 +128,7 @@ describe("GET /companies", function () {
     });
   });
 
+  // Test for successful filtering of companies with multiple filters
   test("works: filtering on all filters", async function () {
     const resp = await request(app)
         .get("/companies")
@@ -139,6 +146,7 @@ describe("GET /companies", function () {
     });
   });
 
+   // Test for bad request with invalid filter key
   test("bad request if invalid filter key", async function () {
     const resp = await request(app)
         .get("/companies")
@@ -150,6 +158,7 @@ describe("GET /companies", function () {
 /************************************** GET /companies/:handle */
 
 describe("GET /companies/:handle", function () {
+   // Test for successful retrieval of a company by handle for anonymous user
   test("works for anon", async function () {
     const resp = await request(app).get(`/companies/c1`);
     expect(resp.body).toEqual({
@@ -168,6 +177,7 @@ describe("GET /companies/:handle", function () {
     });
   });
 
+    // Test for successful retrieval of a company without jobs by handle for anonymous user
   test("works for anon: company w/o jobs", async function () {
     const resp = await request(app).get(`/companies/c2`);
     expect(resp.body).toEqual({
@@ -182,6 +192,8 @@ describe("GET /companies/:handle", function () {
     });
   });
 
+  
+  // Test for not found error when company does not exist
   test("not found for no such company", async function () {
     const resp = await request(app).get(`/companies/nope`);
     expect(resp.statusCode).toEqual(404);
@@ -191,6 +203,7 @@ describe("GET /companies/:handle", function () {
 /************************************** PATCH /companies/:handle */
 
 describe("PATCH /companies/:handle", function () {
+  // Test for successful update of a company by admin
   test("works for admin", async function () {
     const resp = await request(app)
         .patch(`/companies/c1`)
@@ -209,6 +222,7 @@ describe("PATCH /companies/:handle", function () {
     });
   });
 
+  // Test for unauthorized access by non-admin
   test("unauth for non-admin", async function () {
     const resp = await request(app)
         .patch(`/companies/c1`)
@@ -219,6 +233,7 @@ describe("PATCH /companies/:handle", function () {
     expect(resp.statusCode).toEqual(401);
   });
 
+  // Test for unauthorized access by anonymous user
   test("unauth for anon", async function () {
     const resp = await request(app)
         .patch(`/companies/c1`)
@@ -228,6 +243,7 @@ describe("PATCH /companies/:handle", function () {
     expect(resp.statusCode).toEqual(401);
   });
 
+  // Test for not found error when company does not exist
   test("not found on no such company", async function () {
     const resp = await request(app)
         .patch(`/companies/nope`)
@@ -238,6 +254,7 @@ describe("PATCH /companies/:handle", function () {
     expect(resp.statusCode).toEqual(404);
   });
 
+  // Test for bad request when attempting to change handle
   test("bad request on handle change attempt", async function () {
     const resp = await request(app)
         .patch(`/companies/c1`)
@@ -248,6 +265,7 @@ describe("PATCH /companies/:handle", function () {
     expect(resp.statusCode).toEqual(400);
   });
 
+  // Test for bad request with invalid data
   test("bad request on invalid data", async function () {
     const resp = await request(app)
         .patch(`/companies/c1`)
@@ -262,6 +280,7 @@ describe("PATCH /companies/:handle", function () {
 /************************************** DELETE /companies/:handle */
 
 describe("DELETE /companies/:handle", function () {
+  // Test for successful deletion of a company by admin
   test("works for admin", async function () {
     const resp = await request(app)
         .delete(`/companies/c1`)
@@ -269,6 +288,7 @@ describe("DELETE /companies/:handle", function () {
     expect(resp.body).toEqual({ deleted: "c1" });
   });
 
+  // Test for unauthorized access by non-admin
   test("unauth for non-admin", async function () {
     const resp = await request(app)
         .delete(`/companies/c1`)
@@ -276,12 +296,14 @@ describe("DELETE /companies/:handle", function () {
     expect(resp.statusCode).toEqual(401);
   });
 
+  // Test for unauthorized access by anonymous user
   test("unauth for anon", async function () {
     const resp = await request(app)
         .delete(`/companies/c1`);
     expect(resp.statusCode).toEqual(401);
   });
 
+  // Test for not found error when company does not exist
   test("not found for no such company", async function () {
     const resp = await request(app)
         .delete(`/companies/nope`)

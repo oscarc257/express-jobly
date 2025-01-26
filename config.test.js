@@ -7,7 +7,7 @@ describe("config can come from env", function () {
     process.env.DATABASE_URL = "other";
     process.env.NODE_ENV = "other";
 
-    const config = require("./config");
+    let config = require("./config");
     expect(config.SECRET_KEY).toEqual("abc");
     expect(config.PORT).toEqual(5000);
     expect(config.getDatabaseUri()).toEqual("other");
@@ -18,10 +18,17 @@ describe("config can come from env", function () {
     delete process.env.BCRYPT_WORK_FACTOR;
     delete process.env.DATABASE_URL;
 
+    // Clear the require cache to reload the config module
+    jest.resetModules();
+    config = require("./config");
+
     expect(config.getDatabaseUri()).toEqual("jobly");
     process.env.NODE_ENV = "test";
 
     expect(config.getDatabaseUri()).toEqual("jobly_test");
+
+    // Reset NODE_ENV
+    process.env.NODE_ENV = "";
   });
 })
 

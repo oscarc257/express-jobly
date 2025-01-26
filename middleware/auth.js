@@ -1,6 +1,8 @@
 "use strict";
 
 /** Convenience middleware to handle common auth cases in routes. */
+//We will add middleware functions to ensure that only admins can create, update, and delete companies, 
+// and that only admins or the correct user can get, update, or delete user information.
 
 const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = require("../config");

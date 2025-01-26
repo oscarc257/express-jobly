@@ -46,10 +46,13 @@ async function commonBeforeAll() {
       [testJobIds[0]]);
 }
 
+// This method starts a new database transaction before each test. This ensures that each test runs in isolation with a clean state.
 async function commonBeforeEach() {
   await db.query("BEGIN");
 }
 
+//This method rolls back the database transaction after each test. 
+// This undoes any changes made during the test, ensuring that the database state is reset for the next test.
 async function commonAfterEach() {
   await db.query("ROLLBACK");
 }

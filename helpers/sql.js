@@ -3,20 +3,21 @@ const { BadRequestError } = require("../expressError");
 // THIS NEEDS SOME GREAT DOCUMENTATION.
 
 /**
- * Helper for making selective update queries.
+ * Generates a SQL query for partially updating a row in a database table.
  *
- * The calling function can use it to make the SET clause of an SQL UPDATE
- * statement.
+ * @param {Object} dataToUpdate - An object containing the data to update.
+ * @param {Object} jsToSql - An object mapping JavaScript-style field names to SQL-style column names.
+ * @returns {Object} An object containing the SQL set clause and the values to update.
+ * @throws {BadRequestError} If no data is provided to update.
  *
- * @param dataToUpdate {Object} {field1: newVal, field2: newVal, ...}
- * @param jsToSql {Object} maps js-style data fields to database column names,
- *   like { firstName: "first_name", age: "age" }
- *
- * @returns {Object} {sqlSetCols, dataToUpdate}
- *
- * @example {firstName: 'Aliya', age: 32} =>
- *   { setCols: '"first_name"=$1, "age"=$2',
- *     values: ['Aliya', 32] }
+ * @example
+ * const dataToUpdate = { firstName: 'Aliya', age: 32 };
+ * const jsToSql = { firstName: 'first_name' };
+ * const result = sqlForPartialUpdate(dataToUpdate, jsToSql);
+ * // result = {
+ * //   setCols: '"first_name"=$1, "age"=$2',
+ * //   values: ['Aliya', 32]
+ * // }
  */
 
 function sqlForPartialUpdate(dataToUpdate, jsToSql) {
